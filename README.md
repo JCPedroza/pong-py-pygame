@@ -1,4 +1,4 @@
-# Basic Pong Python Implementation Using Pygame
+# Basic Pong Implemented in Python Using Pygame
 
 A basic Pong implementation written in Python, using the Pygame framework.
 
