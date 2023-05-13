@@ -14,7 +14,7 @@ BALL_VEL = 4
 GOAL_HEIGHT = 100
 GOAL_WIDTH = 20
 
-PAD_WIDTH = 20
+PAD_WIDTH = 100
 PAD_HEIGHT = 200
 PAD_VEL = 3
 
@@ -157,7 +157,10 @@ while True:
 
     # Pad 0 collision
     if ball_nxt.colliderect(pad0):
-        ball_x_vel = -ball_x_vel
+        if ball.y + ball.height <= pad0.y or ball.y >= pad0.y + pad0.height:
+            ball_y_vel = -ball_y_vel
+        else:
+            ball_x_vel = -ball_x_vel
 
     # Pad 1 collision
     if ball_nxt.colliderect(pad1):
