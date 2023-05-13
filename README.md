@@ -2,6 +2,14 @@
 
 A basic pong-like game written in Python, using the Pygame framework.
 
+## Install PIP Package Manager
+
+If you don't have pip installed already:
+
+```bash
+apt install python3-pip
+```
+
 ## Install Dependencies
 
 ```bash
