@@ -14,7 +14,7 @@ BALL_VEL = 4
 GOAL_HEIGHT = 100
 GOAL_WIDTH = 20
 
-PAD_WIDTH = 15
+PAD_WIDTH = 20
 PAD_HEIGHT = 200
 PAD_VEL = 3
 
@@ -50,11 +50,6 @@ ball_x_vel = BALL_VEL
 ball_y_vel = BALL_VEL
 
 clock = pyg.time.Clock()
-
-
-def move_ball(ball, vel):
-    ball.x += vel
-    ball.y += vel
 
 
 def draw(screen, walls, goals, pads, ball):
@@ -145,6 +140,10 @@ while True:
 
     # Ball Movement
 
+    ball_nxt = pyg.Rect(ball)
+    ball_nxt.x += ball_x_vel
+    ball_nxt.y += ball_y_vel
+
     # Goal collision
     if ball.colliderect(goals["left"]) or ball.colliderect(goals["right"]):
         ball.x = WIDTH // 2
@@ -157,11 +156,11 @@ while True:
         ball_x_vel = -ball_x_vel
 
     # Pad 0 collision
-    if ball.colliderect(pad0):
+    if ball_nxt.colliderect(pad0):
         ball_x_vel = -ball_x_vel
 
     # Pad 1 collision
-    if ball.colliderect(pad1):
+    if ball_nxt.colliderect(pad1):
         ball_x_vel = -ball_x_vel
 
     ball.x += ball_x_vel
