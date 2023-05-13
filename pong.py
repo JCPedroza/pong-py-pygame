@@ -3,15 +3,20 @@ import pygame as pyg
 
 TITLE = "PONG"
 
-WIDTH = 600
-HEIGHT = 400
+WIDTH = 1000
+HEIGHT = 500
+
+WALL_SIZE = 20
+
+BALL_SIZE = 10
+BALL_VEL = 4
 
 GOAL_HEIGHT = 100
 GOAL_WIDTH = 20
-WALL_SIZE = 20
 
-PAD_VEL = 5
-BALL_VEL = 1
+PAD_WIDTH = 15
+PAD_HEIGHT = 200
+PAD_VEL = 3
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -37,9 +42,9 @@ goals = {
     "right": pyg.Rect(screen.get_width() - WALL_SIZE, goal_offset_right, GOAL_WIDTH, GOAL_HEIGHT)
 }
 
-ball = pyg.Rect(300, 200, 20, 20)
-pad0 = pyg.Rect(100, 200, 20, 100)
-pad1 = pyg.Rect(500, 200, 20, 100)
+ball = pyg.Rect(300, 200, BALL_SIZE, BALL_SIZE)
+pad0 = pyg.Rect(100, 200, PAD_WIDTH, PAD_HEIGHT)
+pad1 = pyg.Rect(500, 200, PAD_WIDTH, PAD_HEIGHT)
 
 ball_x_vel = BALL_VEL
 ball_y_vel = BALL_VEL
@@ -47,20 +52,42 @@ ball_y_vel = BALL_VEL
 clock = pyg.time.Clock()
 
 
-def quit_game(pygame, system):
-    pygame.quit()
-    system.exit()
+def move_ball(ball, vel):
+    ball.x += vel
+    ball.y += vel
+
+
+def draw(screen, walls, goals, pads, ball):
+    screen.fill((0, 0, 0))
+
+    for _, wall in walls.items():
+        pyg.draw.rect(screen, WHITE, wall)
+
+    for _, goal in goals.items():
+        pyg.draw.rect(screen, BLACK, goal)
+
+    for pad in pads:
+        pyg.draw.rect(screen, WHITE, pad)
+
+    pyg.draw.rect(screen, WHITE, ball)
+
+    pyg.display.update()
+
+
+def quit_game():
+    pyg.quit()
+    sys.exit()
 
 
 while True:
     for event in pyg.event.get():
         if event.type == pyg.QUIT:
-            quit_game(pyg, sys)
+            quit_game()
 
     pressed_keys = pyg.key.get_pressed()
 
     if pressed_keys[pyg.K_LCTRL] and pressed_keys[pyg.K_q]:
-        quit_game(pyg, sys)
+        quit_game()
 
     # Paddle 0 movement
 
@@ -91,41 +118,42 @@ while True:
     if pressed_keys[pyg.K_UP]:
         pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.y -= PAD_VEL
+
         if not pad1_nxt.colliderect(walls["up"]):
             pad1.y -= PAD_VEL
+
     elif pressed_keys[pyg.K_DOWN]:
         pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.y += PAD_VEL
+
         if not pad1_nxt.colliderect(walls["down"]):
             pad1.y += PAD_VEL
 
     if pressed_keys[pyg.K_LEFT]:
         pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.x -= PAD_VEL
+
         if not pad1_nxt.colliderect(walls["left"]):
             pad1.x -= PAD_VEL
+
     elif pressed_keys[pyg.K_RIGHT]:
         pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.x += PAD_VEL
+
         if not pad1_nxt.colliderect(walls["right"]):
             pad1.x += PAD_VEL
 
-    # Ball movement
-
-    ball.x += ball_x_vel
-    ball.y += ball_y_vel
+    # Ball Movement
 
     # Goal collision
     if ball.colliderect(goals["left"]) or ball.colliderect(goals["right"]):
         ball.x = WIDTH // 2
         ball.y = HEIGHT // 2
-
     # Horizontal collision
-    if ball.colliderect(walls["up"]) or ball.colliderect(walls["down"]):
+    elif ball.colliderect(walls["up"]) or ball.colliderect(walls["down"]):
         ball_y_vel = -ball_y_vel
-
     # Vertical collision
-    if ball.colliderect(walls["left"]) or ball.colliderect(walls["right"]):
+    elif ball.colliderect(walls["left"]) or ball.colliderect(walls["right"]):
         ball_x_vel = -ball_x_vel
 
     # Pad 0 collision
@@ -136,19 +164,9 @@ while True:
     if ball.colliderect(pad1):
         ball_x_vel = -ball_x_vel
 
-    # Draw screen elements
+    ball.x += ball_x_vel
+    ball.y += ball_y_vel
 
-    screen.fill((0, 0, 0))
+    draw(screen, walls, goals, [pad0, pad1], ball)
 
-    for _, wall in walls.items():
-        pyg.draw.rect(screen, WHITE, wall)
-
-    for _, goal in goals.items():
-        pyg.draw.rect(screen, BLACK, goal)
-
-    pyg.draw.rect(screen, WHITE, ball)
-    pyg.draw.rect(screen, WHITE, pad0)
-    pyg.draw.rect(screen, WHITE, pad1)
-
-    pyg.display.update()
     clock.tick(60)
