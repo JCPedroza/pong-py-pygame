@@ -52,24 +52,48 @@ while True:
     pressed_keys = pyg.key.get_pressed()
 
     if pressed_keys[pyg.K_UP]:
-        pad0.y -= PAD_VEL
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.y -= PAD_VEL
+        if not pad1_nxt.colliderect(walls["up"]):
+            pad1.y -= PAD_VEL
     elif pressed_keys[pyg.K_DOWN]:
-        pad0.y += PAD_VEL
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.y += PAD_VEL
+        if not pad1_nxt.colliderect(walls["down"]):
+            pad1.y += PAD_VEL
 
     if pressed_keys[pyg.K_LEFT]:
-        pad0.x -= PAD_VEL
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.x -= PAD_VEL
+        if not pad1_nxt.colliderect(walls["left"]):
+            pad1.x -= PAD_VEL
     elif pressed_keys[pyg.K_RIGHT]:
-        pad0.x += PAD_VEL
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.x += PAD_VEL
+        if not pad1_nxt.colliderect(walls["right"]):
+            pad1.x += PAD_VEL
 
     if pressed_keys[pyg.K_w]:
-        pad1.y -= PAD_VEL
+        pad0_nxt = pyg.Rect(pad0)
+        pad0_nxt.y -= PAD_VEL
+        if not pad0_nxt.colliderect(walls["up"]):
+            pad0.y -= PAD_VEL
     elif pressed_keys[pyg.K_s]:
-        pad1.y += PAD_VEL
+        pad0_nxt = pyg.Rect(pad0)
+        pad0_nxt.y += PAD_VEL
+        if not pad0_nxt.colliderect(walls["down"]):
+            pad0.y += PAD_VEL
 
     if pressed_keys[pyg.K_a]:
-        pad1.x -= PAD_VEL
+        pad0_nxt = pyg.Rect(pad0)
+        pad0_nxt.x -= PAD_VEL
+        if not pad0_nxt.colliderect(walls["left"]):
+            pad0.x -= PAD_VEL
     elif pressed_keys[pyg.K_d]:
-        pad1.x += PAD_VEL
+        pad0_nxt = pyg.Rect(pad0)
+        pad0_nxt.x += PAD_VEL
+        if not pad0_nxt.colliderect(walls["right"]):
+            pad0.x += PAD_VEL
 
     ball.x += ball_x_vel
     ball.y += ball_y_vel
