@@ -43,13 +43,21 @@ ball_y_vel = BALL_VEL
 
 clock = pyg.time.Clock()
 
+
+def quit_game(pygame, system):
+    pygame.quit()
+    system.exit()
+
+
 while True:
     for event in pyg.event.get():
         if event.type == pyg.QUIT:
-            pyg.quit()
-            sys.exit()
+            quit_game(pyg, sys)
 
     pressed_keys = pyg.key.get_pressed()
+
+    if pressed_keys[pyg.K_LCTRL] and pressed_keys[pyg.K_q]:
+        quit_game(pyg, sys)
 
     if pressed_keys[pyg.K_UP]:
         pad1_nxt = pyg.Rect(pad1)
