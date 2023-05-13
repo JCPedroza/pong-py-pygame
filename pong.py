@@ -1,6 +1,8 @@
 import sys
 import pygame as pyg
 
+TITLE = "PONG"
+
 WIDTH = 600
 HEIGHT = 400
 
@@ -17,6 +19,7 @@ BLACK = (0, 0, 0)
 DISPLAY = (WIDTH, HEIGHT)
 
 pyg.init()
+pyg.display.set_caption(TITLE)
 screen = pyg.display.set_mode(DISPLAY)
 
 walls = {
@@ -59,27 +62,7 @@ while True:
     if pressed_keys[pyg.K_LCTRL] and pressed_keys[pyg.K_q]:
         quit_game(pyg, sys)
 
-    if pressed_keys[pyg.K_UP]:
-        pad1_nxt = pyg.Rect(pad1)
-        pad1_nxt.y -= PAD_VEL
-        if not pad1_nxt.colliderect(walls["up"]):
-            pad1.y -= PAD_VEL
-    elif pressed_keys[pyg.K_DOWN]:
-        pad1_nxt = pyg.Rect(pad1)
-        pad1_nxt.y += PAD_VEL
-        if not pad1_nxt.colliderect(walls["down"]):
-            pad1.y += PAD_VEL
-
-    if pressed_keys[pyg.K_LEFT]:
-        pad1_nxt = pyg.Rect(pad1)
-        pad1_nxt.x -= PAD_VEL
-        if not pad1_nxt.colliderect(walls["left"]):
-            pad1.x -= PAD_VEL
-    elif pressed_keys[pyg.K_RIGHT]:
-        pad1_nxt = pyg.Rect(pad1)
-        pad1_nxt.x += PAD_VEL
-        if not pad1_nxt.colliderect(walls["right"]):
-            pad1.x += PAD_VEL
+    # Paddle 0 movement
 
     if pressed_keys[pyg.K_w]:
         pad0_nxt = pyg.Rect(pad0)
@@ -103,21 +86,57 @@ while True:
         if not pad0_nxt.colliderect(walls["right"]):
             pad0.x += PAD_VEL
 
+    # Paddle 1 movement
+
+    if pressed_keys[pyg.K_UP]:
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.y -= PAD_VEL
+        if not pad1_nxt.colliderect(walls["up"]):
+            pad1.y -= PAD_VEL
+    elif pressed_keys[pyg.K_DOWN]:
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.y += PAD_VEL
+        if not pad1_nxt.colliderect(walls["down"]):
+            pad1.y += PAD_VEL
+
+    if pressed_keys[pyg.K_LEFT]:
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.x -= PAD_VEL
+        if not pad1_nxt.colliderect(walls["left"]):
+            pad1.x -= PAD_VEL
+    elif pressed_keys[pyg.K_RIGHT]:
+        pad1_nxt = pyg.Rect(pad1)
+        pad1_nxt.x += PAD_VEL
+        if not pad1_nxt.colliderect(walls["right"]):
+            pad1.x += PAD_VEL
+
+    # Ball movement
+
     ball.x += ball_x_vel
     ball.y += ball_y_vel
 
+    # Goal collision
     if ball.colliderect(goals["left"]) or ball.colliderect(goals["right"]):
         ball.x = WIDTH // 2
         ball.y = HEIGHT // 2
 
+    # Horizontal collision
     if ball.colliderect(walls["up"]) or ball.colliderect(walls["down"]):
         ball_y_vel = -ball_y_vel
 
+    # Vertical collision
     if ball.colliderect(walls["left"]) or ball.colliderect(walls["right"]):
         ball_x_vel = -ball_x_vel
 
-    if ball.colliderect(pad0) or ball.colliderect(pad1):
+    # Pad 0 collision
+    if ball.colliderect(pad0):
         ball_x_vel = -ball_x_vel
+
+    # Pad 1 collision
+    if ball.colliderect(pad1):
+        ball_x_vel = -ball_x_vel
+
+    # Draw screen elements
 
     screen.fill((0, 0, 0))
 
