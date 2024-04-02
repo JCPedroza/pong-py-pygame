@@ -1,7 +1,7 @@
 import sys
 import pygame as pyg
 
-TITLE = "PONG"
+TITLE = "Pong-Like Game"
 
 WIDTH = 1000
 HEIGHT = 500
@@ -84,26 +84,30 @@ while True:
     if pressed_keys[pyg.K_LCTRL] and pressed_keys[pyg.K_q]:
         quit_game()
 
+    # Ghost objects
+
+    pad0_nxt = pyg.Rect(pad0)
+    pad1_nxt = pyg.Rect(pad1)
+    ball_nxt = pyg.Rect(ball)
+
     # Paddle 0 movement
 
     if pressed_keys[pyg.K_w]:
-        pad0_nxt = pyg.Rect(pad0)
         pad0_nxt.y -= PAD_VEL
         if not pad0_nxt.colliderect(walls["up"]):
             pad0.y -= PAD_VEL
+
     elif pressed_keys[pyg.K_s]:
-        pad0_nxt = pyg.Rect(pad0)
         pad0_nxt.y += PAD_VEL
         if not pad0_nxt.colliderect(walls["down"]):
             pad0.y += PAD_VEL
 
     if pressed_keys[pyg.K_a]:
-        pad0_nxt = pyg.Rect(pad0)
         pad0_nxt.x -= PAD_VEL
         if not pad0_nxt.colliderect(walls["left"]):
             pad0.x -= PAD_VEL
+
     elif pressed_keys[pyg.K_d]:
-        pad0_nxt = pyg.Rect(pad0)
         pad0_nxt.x += PAD_VEL
         if not pad0_nxt.colliderect(walls["right"]):
             pad0.x += PAD_VEL
@@ -111,36 +115,27 @@ while True:
     # Paddle 1 movement
 
     if pressed_keys[pyg.K_UP]:
-        pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.y -= PAD_VEL
-
         if not pad1_nxt.colliderect(walls["up"]):
             pad1.y -= PAD_VEL
 
     elif pressed_keys[pyg.K_DOWN]:
-        pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.y += PAD_VEL
-
         if not pad1_nxt.colliderect(walls["down"]):
             pad1.y += PAD_VEL
 
     if pressed_keys[pyg.K_LEFT]:
-        pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.x -= PAD_VEL
-
         if not pad1_nxt.colliderect(walls["left"]):
             pad1.x -= PAD_VEL
 
     elif pressed_keys[pyg.K_RIGHT]:
-        pad1_nxt = pyg.Rect(pad1)
         pad1_nxt.x += PAD_VEL
-
         if not pad1_nxt.colliderect(walls["right"]):
             pad1.x += PAD_VEL
 
     # Ball Movement
 
-    ball_nxt = pyg.Rect(ball)
     ball_nxt.x += ball_x_vel
     ball_nxt.y += ball_y_vel
 
@@ -156,8 +151,8 @@ while True:
         ball_x_vel = -ball_x_vel
 
     # Pad 0 collision
-    if ball_nxt.colliderect(pad0):
-        if ball.y + ball.height <= pad0.y or ball.y >= pad0.y + pad0.height:
+    if ball_nxt.colliderect(pad0_nxt):
+        if ball_nxt.y + ball_nxt.height <= pad0_nxt.y or ball_nxt.y >= pad0_nxt.y + pad0_nxt.height:
             ball_y_vel = -ball_y_vel
         else:
             ball_x_vel = -ball_x_vel
